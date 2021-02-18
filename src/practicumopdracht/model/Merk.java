@@ -9,8 +9,48 @@ import java.util.ArrayList;
  * @author Po
  */
 public class Merk {
-    private String naam;
-    private double netWaarde;
+    private String merkNaam;
+    private String netWaarde;
     private LocalDate oprichtdatum;
-    private ArrayList<Telefooneigenaar> telefoonEigenaar;
+//    private ArrayList<Telefooneigenaar> telefoonEigenaar;
+
+    public Merk(String merkNaam, String netWaarde, LocalDate oprichtdatum) {
+        this.merkNaam = merkNaam;
+        this.netWaarde = netWaarde;
+        this.oprichtdatum = oprichtdatum;
+
+    }
+
+//    public Merk(String text, String merkNaam) {
+//        this.merkNaam = merkNaam;
+//    }
+
+    public String getMerkNaam() {
+        return merkNaam;
+    }
+
+    public void setMerkNaam(String merkNaam) {
+        this.merkNaam = merkNaam;
+    }
+
+    public String getNetWaarde() {
+        return netWaarde;
+    }
+
+    public void setNetWaarde(String netWaarde) {
+        this.netWaarde = netWaarde;
+    }
+
+    public LocalDate getOprichtdatum() {
+        return oprichtdatum;
+    }
+
+    public void setOprichtdatum(LocalDate oprichtdatum) {
+        this.oprichtdatum = oprichtdatum;
+    }
+
+    @Override
+    public String toString() {
+        return "MerkNaam: " + merkNaam + '\n' + "NetWaarde: " + netWaarde + "\n" + "Oprichtdatum: " + oprichtdatum;
+    }
 }

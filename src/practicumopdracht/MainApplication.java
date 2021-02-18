@@ -6,29 +6,31 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
+import practicumopdracht.views.Detailview;
+import practicumopdracht.views.Masterview;
+import practicumopdracht.controllers.MasterController;
+import practicumopdracht.controllers.Controller;
 
 public class MainApplication extends Application {
 
+    private static Stage stage;
+
     @Override
     public void start(Stage stage) {
+        MainApplication.stage = stage;
         if(!Main.launchedFromMain) {
             System.err.println("Je moet deze applicatie opstarten vanuit de Main-class, niet de MainApplication-class!");
             System.exit(1337);
 
             return;
         }
-
         stage.setTitle(String.format("Practicumopdracht OOP2 - %s", Main.studentNaam));
-        stage.setWidth(640);
-        stage.setHeight(480);
+        stage.setWidth(450);
+        stage.setHeight(730);
+        setScene(new MasterController());
         stage.show();
-
-        HBox rootHBox = new HBox();
-        TextField textField = new TextField();
-        Button button1 = new Button("knop 1");
-        rootHBox.getChildren().addAll(button1);
-        Scene scene = new Scene(rootHBox);
-
-        stage.setScene(scene);
+    }
+    public static void setScene(Controller controller){
+        stage.setScene(new Scene(controller.getView().getRoot()));
     }
 }
