@@ -1,6 +1,7 @@
 package practicumopdracht.model;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 
 /**
  * This method <description of functionality>
@@ -10,16 +11,14 @@ import java.time.LocalDate;
 public class Telefooneigenaar {
     private String naam;
     private double garantie;
-    private boolean binnenGarantie;
     private boolean statusAbonnement;
     private LocalDate aankoopdatum;
     private int aantalTelefoons;
-
-    public Telefooneigenaar(String naam, double garantie, boolean statusAbonnement, boolean binnenGarantie, LocalDate aankoopdatum, int aantalTelefoons) {
+    public Telefooneigenaar(String naam, double garantie, boolean statusAbonnement, LocalDate aankoopdatum, int aantalTelefoons) {
         this.naam = naam;
         this.garantie = garantie;
         this.statusAbonnement = statusAbonnement;
-        this.binnenGarantie = binnenGarantie;
+
         this.aankoopdatum = aankoopdatum;
         this.aantalTelefoons = aantalTelefoons;
     }
@@ -48,13 +47,6 @@ public class Telefooneigenaar {
         this.statusAbonnement = statusAbonnement;
     }
 
-    public boolean isBinnenGarantie() {
-        return binnenGarantie;
-    }
-
-    public void setBinnenGarantie(boolean binnenGarantie) {
-        this.binnenGarantie = binnenGarantie;
-    }
 
     public LocalDate getAankoopdatum() {
         return aankoopdatum;
@@ -74,8 +66,7 @@ public class Telefooneigenaar {
 
     @Override
     public String toString() {
-        return "naam=" + naam + "\n" + "garantie=" + garantie + "\n" + "binnenGarantie=" +
-                binnenGarantie + "\n" + "statusAbonnement=" + statusAbonnement + "\n" + "aankoopdatum=" +
-                aankoopdatum + "\n" + "aantalTelefoons=" + aantalTelefoons;
+        return "naam: " + this.naam + "\n" + "garantie: " + this.garantie + "\n" + "Type merk: " + "\n" + "statusAbonnement: " + (this.statusAbonnement  ? "Wel abonnement" : "Geen abonnement") + "\n" + "aankoopdatum: " +
+                aankoopdatum + "\n" + "aantalTelefoons: " + aantalTelefoons;
     }
 }

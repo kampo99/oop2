@@ -25,8 +25,8 @@ public class MainApplication extends Application {
             return;
         }
         stage.setTitle(String.format("Practicumopdracht OOP2 - %s", Main.studentNaam));
-        stage.setWidth(450);
-        stage.setHeight(730);
+        stage.setWidth(455);
+        stage.setHeight(755);
         setScene(new MasterController());
         stage.show();
     }

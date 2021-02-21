@@ -12,7 +12,6 @@ public class Merk {
     private String merkNaam;
     private String netWaarde;
     private LocalDate oprichtdatum;
-//    private ArrayList<Telefooneigenaar> telefoonEigenaar;
 
     public Merk(String merkNaam, String netWaarde, LocalDate oprichtdatum) {
         this.merkNaam = merkNaam;
@@ -20,10 +19,6 @@ public class Merk {
         this.oprichtdatum = oprichtdatum;
 
     }
-
-//    public Merk(String text, String merkNaam) {
-//        this.merkNaam = merkNaam;
-//    }
 
     public String getMerkNaam() {
         return merkNaam;
@@ -51,6 +46,6 @@ public class Merk {
 
     @Override
     public String toString() {
-        return "MerkNaam: " + merkNaam + '\n' + "NetWaarde: " + netWaarde + "\n" + "Oprichtdatum: " + oprichtdatum;
+        return "MerkNaam: " + merkNaam + '\n' + "NetWaarde: " + netWaarde + " Miljard" +  "\n" + "Oprichtdatum: " + oprichtdatum;
     }
 }
