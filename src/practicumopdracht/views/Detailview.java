@@ -22,7 +22,7 @@ public class Detailview extends View {
 
     private TextField tfNaam;
     private TextField tfGarantie;
-    private ComboBox comboMerkenLijst;
+    private ComboBox<String> comboMerkenLijst;
     private CheckBox cbstatusAbo;
     private DatePicker dpAankoopDatum;
     private TextField tfAantalTelefoons;
@@ -50,8 +50,8 @@ public class Detailview extends View {
         this.tfGarantie = new TextField();
         Label lblComboMerkenLijst = new Label("Merkenopties:");
         lblComboMerkenLijst.setStyle("-fx-font-family: Lato");
-        ObservableList<String> merkenopties = FXCollections.observableArrayList("Apple", "Samsung", "One Plus");
-        this.comboMerkenLijst = new ComboBox<>(merkenopties);
+//        ObservableList<String> merkenopties = FXCollections.observableArrayList("Apple", "Samsung", "One Plus");
+        this.comboMerkenLijst = new ComboBox<>();
         Label lblstatusAbo = new Label("Abonnement:");
         lblstatusAbo.setStyle("-fx-font-family: Lato");
         this.cbstatusAbo = new CheckBox();
@@ -109,6 +109,9 @@ public class Detailview extends View {
         return tfGarantie;
     }
 
+    public ComboBox<String> getComboMerkenLijst() {
+        return comboMerkenLijst;
+    }
 
     public CheckBox getCbstatusAbo() {
         return cbstatusAbo;

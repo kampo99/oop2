@@ -20,6 +20,10 @@ public class Merk {
 
     }
 
+    public Merk() {
+
+    }
+
     public String getMerkNaam() {
         return merkNaam;
     }

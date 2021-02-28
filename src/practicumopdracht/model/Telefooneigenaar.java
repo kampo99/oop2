@@ -1,5 +1,8 @@
 package practicumopdracht.model;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 
@@ -14,6 +17,11 @@ public class Telefooneigenaar {
     private boolean statusAbonnement;
     private LocalDate aankoopdatum;
     private int aantalTelefoons;
+    private ObservableList<Merk> merken;
+
+    public Telefooneigenaar(){
+        merken = FXCollections.observableArrayList(new ArrayList<>());
+    }
     public Telefooneigenaar(String naam, double garantie, boolean statusAbonnement, LocalDate aankoopdatum, int aantalTelefoons) {
         this.naam = naam;
         this.garantie = garantie;
@@ -62,6 +70,14 @@ public class Telefooneigenaar {
 
     public void setAantalTelefoons(int aantalTelefoons) {
         this.aantalTelefoons = aantalTelefoons;
+    }
+
+    public void setMerken(ObservableList<Merk> merk){
+        this.merken = merk;
+    }
+
+    public ObservableList<Merk> getMerken() {
+        return merken;
     }
 
     @Override

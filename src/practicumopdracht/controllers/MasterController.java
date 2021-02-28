@@ -8,6 +8,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ListView;
 import practicumopdracht.MainApplication;
 import practicumopdracht.model.Merk;
+import practicumopdracht.model.Telefooneigenaar;
 import practicumopdracht.views.Masterview;
 import practicumopdracht.views.View;
 
@@ -23,11 +24,15 @@ public class MasterController extends Controller{
     private final View VIEW;
     private Masterview masterview;
     private ObservableList<Merk> merkObservableList;
+    private Telefooneigenaar telefooneigenaar;
+    private Merk merkmodel;
 
     public MasterController(){
         masterview = new Masterview();
         merkObservableList = FXCollections.observableList(new ArrayList<>());
         masterview.getLvmerkListView().setItems(merkObservableList);
+        telefooneigenaar = new Telefooneigenaar();
+        merkmodel = new Merk();
 
         masterview.getButtonToevoegen().setOnAction(actionEvent -> toevoegenMaster());
         masterview.getButtonVerwijderen().setOnAction(actionEvent -> verwijderenMaster());
@@ -82,6 +87,7 @@ public class MasterController extends Controller{
         masterview.getLvmerkListView().getSelectionModel().getSelectedItem().setMerkNaam(masterview.getTfmerkNaam().getText());
         masterview.getLvmerkListView().getSelectionModel().getSelectedItem().setNetWaarde(masterview.getTfnetWaarde().getText());
         masterview.getLvmerkListView().getSelectionModel().getSelectedItem().setOprichtdatum(masterview.getDpoprichtDatum().getValue());
+        telefooneigenaar.getMerken().add(merkmodel);
         masterview.getLvmerkListView().getSelectionModel().clearSelection();
         masterview.getTfmerkNaam().setText("");
     }
@@ -104,6 +110,11 @@ public class MasterController extends Controller{
         }
         if(masterview.getTfnetWaarde().getText().isEmpty()){
             alertMelding.setContentText("Netwaarde moet ingevuld zijn!");
+            alertMelding.show();
+            return false;
+        }
+        if(masterview.getDpoprichtDatum().getValue() == null){
+            alertMelding.setContentText("Oprichtdatum moet ingevuld zijn!");
             alertMelding.show();
             return false;
         }
