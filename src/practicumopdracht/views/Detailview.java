@@ -52,6 +52,9 @@ public class Detailview extends View {
         lblComboMerkenLijst.setStyle("-fx-font-family: Lato");
 //        ObservableList<String> merkenopties = FXCollections.observableArrayList("Apple", "Samsung", "One Plus");
         this.comboMerkenLijst = new ComboBox<>();
+//        comboMerkenLijst.getItems().add("Apple");
+//        comboMerkenLijst.getItems().add("Samsung");
+//        comboMerkenLijst.getItems().add("One Plus");
         Label lblstatusAbo = new Label("Abonnement:");
         lblstatusAbo.setStyle("-fx-font-family: Lato");
         this.cbstatusAbo = new CheckBox();

@@ -84,12 +84,15 @@ public class MasterController extends Controller{
         while (!checkAlerts()){
             return;
         }
-        masterview.getLvmerkListView().getSelectionModel().getSelectedItem().setMerkNaam(masterview.getTfmerkNaam().getText());
-        masterview.getLvmerkListView().getSelectionModel().getSelectedItem().setNetWaarde(masterview.getTfnetWaarde().getText());
-        masterview.getLvmerkListView().getSelectionModel().getSelectedItem().setOprichtdatum(masterview.getDpoprichtDatum().getValue());
+//        masterview.getLvmerkListView().getSelectionModel().getSelectedItem().setMerkNaam(masterview.getTfmerkNaam().getText());
+//        masterview.getLvmerkListView().getSelectionModel().getSelectedItem().setNetWaarde(masterview.getTfnetWaarde().getText());
+//        masterview.getLvmerkListView().getSelectionModel().getSelectedItem().setOprichtdatum(masterview.getDpoprichtDatum().getValue());
+        merkmodel.setMerkNaam(masterview.getTfmerkNaam().getText());
+        merkmodel.setNetWaarde(masterview.getTfnetWaarde().getText());
+        merkmodel.setOprichtdatum(masterview.getDpoprichtDatum().getValue());
         telefooneigenaar.getMerken().add(merkmodel);
+
         masterview.getLvmerkListView().getSelectionModel().clearSelection();
-        masterview.getTfmerkNaam().setText("");
     }
     public boolean ishetgeselecteerd(){
         Alert alertGeselecteerd = new Alert(Alert.AlertType.WARNING);

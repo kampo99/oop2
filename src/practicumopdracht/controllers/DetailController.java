@@ -24,17 +24,24 @@ public class DetailController extends Controller{
     private Detailview detailview;
     private Telefooneigenaar telefooneigenaar;
     private ObservableList<Telefooneigenaar> telefoonEigenaarObservableList;
+    private ObservableList<Merk> merkObservableList;
+    private Merk merk;
 
     public DetailController(){
         detailview = new Detailview();
         telefooneigenaar = new Telefooneigenaar();
         telefoonEigenaarObservableList = FXCollections.observableList(new ArrayList<>());
         detailview.getLvTelefooneigenaarListView().setItems(telefoonEigenaarObservableList);
+        merkObservableList = FXCollections.observableList(new ArrayList<>());
+        merk = new Merk();
 
         detailview.getButtonToevoegen().setOnAction(actionEvent -> toevoegenTE());
         detailview.getButtonVerwijderen().setOnAction(actionEvent -> verwijderenTE());
         detailview.getButtonTerug().setOnAction(actionEvent -> detailNaarMaster());
         detailview.getComboMerkenLijst().setOnAction(actionEvent -> comboBoxSelecteren());
+
+        placeholderNieuweMerk();
+
         VIEW = detailview;
     }
     public void toevoegenTE(){
@@ -51,7 +58,7 @@ public class DetailController extends Controller{
             return;
         }
         telefoonEigenaarObservableList.addAll(new Telefooneigenaar(detailview.getTfnaam().getText(),Double.parseDouble(detailview.getTfGarantie().getText()),
-                detailview.getCbstatusAbo().isAllowIndeterminate(),detailview.getDpAankoopDatum().getValue(),Integer.parseInt(detailview.getTfAantalTelefoons().getText())));
+                detailview.getCbstatusAbo().isIndeterminate(),detailview.getDpAankoopDatum().getValue(),Integer.parseInt(detailview.getTfAantalTelefoons().getText())));
         detailview.getTfnaam().setText("");
         detailview.getTfGarantie().setText("");
         detailview.getCbstatusAbo().setText("");
@@ -65,13 +72,14 @@ public class DetailController extends Controller{
                     if(newValue != null)
                         detailview.getTfGarantie().setText(String.valueOf(newValue.getGarantie()));
                     if (newValue !=null)
-                        detailview.getCbstatusAbo().isSelected();
+                        detailview.getCbstatusAbo().setIndeterminate(newValue.isStatusAbonnement());
                     if (newValue != null)
                         detailview.getDpAankoopDatum().setValue(newValue.getAankoopdatum());
                     if (newValue != null)
                         detailview.getTfAantalTelefoons().setText(String.valueOf(newValue.getAantalTelefoons()));
                 }
         );
+//        synchroniseerCombo(merknaam);
     }
     public void verwijderenTE(){
         telefoonEigenaarObservableList.remove(detailview.getLvTelefooneigenaarListView().getSelectionModel().getSelectedItem());
@@ -87,20 +95,41 @@ public class DetailController extends Controller{
         MainApplication.setScene(new MasterController());
     }
 
+    public void placeholderNieuweMerk(){
+        detailview.getComboMerkenLijst().getItems().add("-- Kies Merk --");
+        detailview.getComboMerkenLijst().getSelectionModel().select("-- Kies Merk --");
+    }
+    public void synchroniseerCombo(String merknaam){
+        detailview.getComboMerkenLijst().getItems().clear();
+
+        for (int i = 0; i < merkObservableList.size(); i++) {
+            Merk m = merkObservableList.get(i);
+            detailview.getComboMerkenLijst().getItems().add(m.getMerkNaam());
+        }
+        detailview.getComboMerkenLijst().getSelectionModel().select(merknaam);
+    }
     public void comboBoxSelecteren(){
         try{
             String combomerkNaam = detailview.getComboMerkenLijst().getValue();
-            for (int i = 0; i < telefoonEigenaarObservableList.size(); i++) {
-                String elementmerkNaam = telefoonEigenaarObservableList.get(i).getNaam();
+            for (int i = 0; i < merkObservableList.size(); i++) {
+                String elementmerkNaam = merkObservableList.get(i).getMerkNaam();
                 if (elementmerkNaam == combomerkNaam){
-                    this.telefooneigenaar = telefoonEigenaarObservableList.get(i);
+                    this.merk = merkObservableList.get(i);
                 }
+//                showModel(merk);
             }
 
         } catch (Exception errorCombo){
 
         }  }
-
+//    public void showModel(Merk model){
+//        detailview.getTfnaam().setText(model.getNaam());
+//        detailview.getTfGarantie().setText(String.valueOf(model.getGarantie()));
+//        detailview.getCbstatusAbo().setIndeterminate(model.isStatusAbonnement());
+//        detailview.getDpAankoopDatum().setValue(model.getAankoopdatum());
+//        detailview.getTfAantalTelefoons().setText(String.valueOf(model.getAantalTelefoons()));
+//
+//    }
     public boolean checkAlerts(){
         Alert alertMelding = new Alert(Alert.AlertType.WARNING);
         if (detailview.getTfnaam().getText().isEmpty()){

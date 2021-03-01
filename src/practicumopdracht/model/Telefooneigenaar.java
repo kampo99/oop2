@@ -2,10 +2,11 @@ package practicumopdracht.model;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.control.ComboBox;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-
+import practicumopdracht.views.Detailview;
 /**
  * This method <description of functionality>
  *
@@ -19,14 +20,15 @@ public class Telefooneigenaar {
     private int aantalTelefoons;
     private ObservableList<Merk> merken;
 
+
     public Telefooneigenaar(){
         merken = FXCollections.observableArrayList(new ArrayList<>());
     }
     public Telefooneigenaar(String naam, double garantie, boolean statusAbonnement, LocalDate aankoopdatum, int aantalTelefoons) {
         this.naam = naam;
         this.garantie = garantie;
-        this.statusAbonnement = statusAbonnement;
 
+        this.statusAbonnement = statusAbonnement;
         this.aankoopdatum = aankoopdatum;
         this.aantalTelefoons = aantalTelefoons;
     }
@@ -55,7 +57,6 @@ public class Telefooneigenaar {
         this.statusAbonnement = statusAbonnement;
     }
 
-
     public LocalDate getAankoopdatum() {
         return aankoopdatum;
     }
@@ -82,7 +83,7 @@ public class Telefooneigenaar {
 
     @Override
     public String toString() {
-        return "naam: " + this.naam + "\n" + "garantie: " + this.garantie + "\n" + "Type merk: " + "\n" + "statusAbonnement: " + (this.statusAbonnement  ? "Wel abonnement" : "Geen abonnement") + "\n" + "aankoopdatum: " +
-                aankoopdatum + "\n" + "aantalTelefoons: " + aantalTelefoons;
+        return "Naam: " + this.naam + "\n" + "Garantie: " + this.garantie + "\n" + "Statusabonnement: " + (this.statusAbonnement  ? "Wel abonnement" : "Geen abonnement") + "\n" + "Aankoopdatum: " +
+                aankoopdatum + "\n" + "Aantal telefoons: " + aantalTelefoons;
     }
 }
