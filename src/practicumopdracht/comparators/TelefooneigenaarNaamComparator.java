@@ -18,10 +18,6 @@ public class TelefooneigenaarNaamComparator implements Comparator<Telefooneigena
             return o1.getAantalTelefoons()- (o2.getAantalTelefoons());
         }
         return o1.getNaam().compareTo(o2.getNaam());
-//        if (o1.getAantalTelefoons() == o2.getAantalTelefoons()) {
-//            return o1.getAankoopdatum().compareTo(o2.getAankoopdatum());
-//        }
-//        return o1.getAantalTelefoons() - o2.getAantalTelefoons();
     }
 
 }

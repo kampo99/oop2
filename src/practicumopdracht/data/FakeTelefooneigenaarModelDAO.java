@@ -11,8 +11,6 @@ public class FakeTelefooneigenaarModelDAO extends TelefooneigenaarModelDAO{
 
     @Override
     public boolean load() {
-//        telefooneigenaarlist.add(new TelefooneigenaarModel("Po","",""));
-//        telefooneigenaarlist.add(new TelefooneigenaarModel());
         return true;
     }
 

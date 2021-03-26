@@ -69,8 +69,8 @@ public class Detailview extends View {
         this.buttonOpslaan = new Button("Opslaan");
         this.lvTelefooneigenaarListView = new ListView<>();
 
-        this.telefooneigenaarNaamAZrb = new RadioButton("Telefooneigenaar Naam A-Z");
-        this.telefooneigenaarNaamZArb = new RadioButton("Telefooneigenaar Naam Z-A");
+        this.telefooneigenaarNaamAZrb = new RadioButton("Telefooneigenaar Naam (A-Z)");
+        this.telefooneigenaarNaamZArb = new RadioButton("Telefooneigenaar Naam (Z-A)");
         this.telefooneigenaarNaamZArb.setSelected(true);
         ToggleGroup telefooneigenaarRbtns = new ToggleGroup();
         telefooneigenaarRbtns.getToggles().addAll(telefooneigenaarNaamAZrb,telefooneigenaarNaamZArb);

@@ -22,9 +22,11 @@ public class Masterview extends View {
     private TextField tfmerkNaam;
     private TextField tfnetWaarde;
     private DatePicker dpoprichtDatum;
-    private MenuItem menuItem1;
-    private MenuItem menuItem2;
-    private MenuItem menuItem3;
+    private MenuItem opslaan;
+    private MenuItem laden;
+    private MenuItem sluiten;
+    private MenuItem oplopend;
+    private MenuItem aflopend;
     private RadioButton merknaamAZrb;
     private RadioButton merknaamZArb;
     private RadioButton merkOprichtdatumAZrb;
@@ -44,18 +46,15 @@ public class Masterview extends View {
 
 
         MenuBar menubar = new MenuBar();
-        Menu menu1 = new Menu("Bestand");
-        Menu menu2 = new Menu("Sorteren");
-        MenuItem menuItem1 = new MenuItem("Opslaan");
-        MenuItem menuItem2 = new MenuItem("Laden");
-        SeparatorMenuItem separatormenu = new SeparatorMenuItem();
-        MenuItem menuItem3 = new MenuItem("Afsluiten");
+        Menu bestanden = new Menu("Bestand");
 
-        MenuItem menuItem4 = new MenuItem("Oplopend");
-        MenuItem menuItem5 = new MenuItem("Aflopend");
-        menu1.getItems().addAll(menuItem1,menuItem2,separatormenu,menuItem3);
-        menu2.getItems().addAll(menuItem4,menuItem5);
-        menubar.getMenus().addAll(menu1,menu2);
+        opslaan = new MenuItem("Opslaan");
+        laden = new MenuItem("Laden");
+        SeparatorMenuItem separatormenu = new SeparatorMenuItem();
+        sluiten = new MenuItem("Afsluiten");
+
+        bestanden.getItems().addAll(opslaan,laden,separatormenu,sluiten);
+        menubar.getMenus().addAll(bestanden);
 
         BorderPane borderpane = new BorderPane(menubar);
         GridPane gridpane = new GridPane();
@@ -76,10 +75,14 @@ public class Masterview extends View {
         this.lvmerkListView = new ListView<>();
         lvmerkListView.setStyle("-fx-font-size: 14px");
 
-        this.merknaamAZrb = new RadioButton("Merknaam A-Z");
-        this.merknaamZArb = new RadioButton("Merknaam Z-A");
+        this.merknaamAZrb = new RadioButton("Merknaam (A-Z)");
+        merknaamAZrb.setStyle("-fx-font-size: 13px");
+        this.merknaamZArb = new RadioButton("Merknaam (Z-A)");
+        merknaamZArb.setStyle("-fx-font-size: 13px");
         this.merkOprichtdatumAZrb = new RadioButton("Oudste Merk");
+        merkOprichtdatumAZrb.setStyle("-fx-font-size: 13px");
         this.merkOprichtdatumZArb = new RadioButton("Nieuwste Merk");
+        merkOprichtdatumZArb.setStyle("-fx-font-size: 13px");
         this.merknaamAZrb.setSelected(true);
         ToggleGroup merkRbtns = new ToggleGroup();
         merkRbtns.getToggles().addAll(merknaamAZrb,merknaamZArb,merkOprichtdatumAZrb,merkOprichtdatumZArb);
@@ -105,7 +108,7 @@ public class Masterview extends View {
         buttonbox1.setStyle("-fx-font-size: 14px");
         buttonbox1.setPadding(new Insets(0,0,10,10));
         buttonbox1.setSpacing(10);
-        this.buttonToevoegen = new Button("Toevoegen");
+        this.buttonToevoegen = new Button("Nieuw");
         this.buttonVerwijderen = new Button("Verwijderen");
         buttonbox1.getChildren().addAll(buttonToevoegen,buttonVerwijderen);
 
@@ -162,16 +165,23 @@ public class Masterview extends View {
         return dpoprichtDatum;
     }
 
-    public MenuItem getMenuItem1() {
-        return menuItem1;
+    public MenuItem getOpslaan() {
+        return opslaan;
+    }
+    public MenuItem getLaden() {
+        return laden;
     }
 
-    public MenuItem getMenuItem2() {
-        return menuItem2;
+    public MenuItem getSluiten() {
+        return sluiten;
     }
 
-    public MenuItem getMenuItem3() {
-        return menuItem3;
+    public MenuItem getOplopend() {
+        return oplopend;
+    }
+
+    public MenuItem getAflopend() {
+        return aflopend;
     }
 
     public RadioButton getMerknaamAZrb() {

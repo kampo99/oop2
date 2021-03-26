@@ -32,10 +32,10 @@ public class MainApplication extends Application {
         detailController = new DetailController();
         stage.setOnCloseRequest(event -> {
             ButtonType sluitButton = new ButtonType("Toch afsluiten", ButtonBar.ButtonData.NO);
-            ButtonType cancelButton = new ButtonType("Shit, Niet sluiten a zebi!", ButtonBar.ButtonData.CANCEL_CLOSE);
+            ButtonType cancelButton = new ButtonType("Niet sluiten", ButtonBar.ButtonData.CANCEL_CLOSE);
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setHeaderText("Weet u zeker dat u wilt afsluiten?");
-            alert.setContentText("Wil je de data opslaan voordat je af sluit?\nNiet opgeslagen gegevens zullen anders verloren gaan.");
+            alert.setContentText("ja of nee?");
             alert.getButtonTypes().setAll(sluitButton, cancelButton);
             ButtonType result = alert.showAndWait().orElse(ButtonType.NO);
 

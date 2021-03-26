@@ -11,9 +11,7 @@ import java.time.LocalDate;
  * @author Po
  */
 public class BinaryMerkModelDAO extends MerkModelDAO{
-//    public BinaryMerkModelDAO(){
-//        this.load();
-//    }
+
     @Override
     public boolean save() {
         File binaryfile = new File("merkmaster.dat");

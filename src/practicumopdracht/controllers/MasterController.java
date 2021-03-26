@@ -57,12 +57,10 @@ public class MasterController extends Controller {
         masterview.getMerkOprichtdatumAZrb().setOnAction(actionEvent -> merkdatumAZ());
         masterview.getMerkOprichtdatumZArb().setOnAction(actionEvent -> merkdatumZA());
 
-//        masterview.getMenuItem1().setOnAction(actionEvent -> menuMerkOpslaan());
-//        masterview.getMenuItem1().setOnAction(actionEvent -> menuTelefooneigenaarOpslaan());
-//        masterview.getMenuItem2().setOnAction(actionEvent -> menuMerkLaden());
-//        masterview.getMenuItem2().setOnAction(actionEvent -> menuTelefooneigenaarLaden());
-//        masterview.getMenuItem3().setOnAction(actionEvent -> menuMerkAfsluiten());
-//        masterview.getMenuItem3().setOnAction(actionEvent -> menuTelefooneigenaarAfsluiten());
+        masterview.getOpslaan().setOnAction(actionEvent -> menuMerkOpslaan());
+        masterview.getOpslaan().setOnAction(actionEvent -> menuTelefooneigenaarOpslaan());
+        masterview.getLaden().setOnAction(actionEvent -> menuMerkLaden());
+        masterview.getLaden().setOnAction(actionEvent -> menuTelefooneigenaarLaden());
 
         VIEW = masterview;
     }
@@ -72,16 +70,13 @@ public class MasterController extends Controller {
             masterview.getLvmerkListView().getSelectionModel().clearSelection();
             masterview.getTfmerkNaam().setText("");
             masterview.getTfnetWaarde().setText("");
-            masterview.getDpoprichtDatum().setValue(LocalDate.now());
+            masterview.getDpoprichtDatum().setValue(null);
             return;
         }
         while (!checkAlerts()) {
             return;
         }
         merkModelObservableList.addAll(new MerkModel(masterview.getTfmerkNaam().getText(), masterview.getTfnetWaarde().getText(), masterview.getDpoprichtDatum().getValue()));
-        masterview.getTfmerkNaam().setText("");
-        masterview.getTfnetWaarde().setText("");
-        masterview.getDpoprichtDatum().setValue(LocalDate.now());
 
         masterview.getLvmerkListView().getSelectionModel().selectedItemProperty().addListener(
                 (observable, oldValue, newValue) -> {
@@ -106,10 +101,6 @@ public class MasterController extends Controller {
     }
     public void masterNaarDetail() {
 
-//        DetailController detailController = (DetailController) MainApplication.getDetailController();
-//        ComboBox<MerkModel> merkModelComboBox = detailController.;
-//        merkModelComboBox.setItems(merkModelObservableList);
-//        merkModelComboBox.setValue(masterview.getLvmerkListView().getSelectionModel().getSelectedItem());
         MainApplication.setScene(new DetailController());
     }
 
@@ -130,24 +121,35 @@ public class MasterController extends Controller {
                         masterview.getDpoprichtDatum().setValue(newValue.getOprichtdatum());
                 });
 
-        merkmodel.setMerkNaam(masterview.getTfmerkNaam().getText());
-        merkmodel.setNetWaarde(masterview.getTfnetWaarde().getText());
-        merkmodel.setOprichtdatum(masterview.getDpoprichtDatum().getValue());
-        telefooneigenaarModel.getMerken().add(merkmodel);
+        masterview.getLvmerkListView().getSelectionModel().getSelectedItem().setMerkNaam(masterview.getTfmerkNaam().getText());
+        masterview.getLvmerkListView().getSelectionModel().getSelectedItem().setNetWaarde(masterview.getTfnetWaarde().getText());
+        masterview.getLvmerkListView().getSelectionModel().getSelectedItem().setOprichtdatum(masterview.getDpoprichtDatum().getValue());
 
         masterview.getLvmerkListView().getSelectionModel().clearSelection();
     }
     public void merknaamAZ(){
         FXCollections.sort(masterview.getLvmerkListView().getItems(), new MerkNaamComparator());
+        masterview.getMerknaamZArb().setSelected(false);
+        masterview.getMerkOprichtdatumAZrb().setSelected(false);
+        masterview.getMerkOprichtdatumZArb().setSelected(false);
     }
     public void merknaamZA(){
         FXCollections.sort(masterview.getLvmerkListView().getItems(), new MerkNaamComparator().reversed());
+        masterview.getMerknaamAZrb().setSelected(false);
+        masterview.getMerkOprichtdatumAZrb().setSelected(false);
+        masterview.getMerkOprichtdatumZArb().setSelected(false);
     }
     public void merkdatumAZ(){
         FXCollections.sort(masterview.getLvmerkListView().getItems(), new MerkOprichtdatumComparator());
+        masterview.getMerknaamAZrb().setSelected(false);
+        masterview.getMerknaamZArb().setSelected(false);
+        masterview.getMerkOprichtdatumZArb().setSelected(false);
     }
     public void merkdatumZA(){
         FXCollections.sort(masterview.getLvmerkListView().getItems(), new MerkOprichtdatumComparator().reversed());
+        masterview.getMerknaamAZrb().setSelected(false);
+        masterview.getMerknaamZArb().setSelected(false);
+        masterview.getMerkOprichtdatumAZrb().setSelected(false);
     }
     public void menuMerkOpslaan(){
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -162,7 +164,17 @@ public class MasterController extends Controller {
         alert.show();
     }
     public void menuTelefooneigenaarOpslaan(){
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
         MainApplication.getTelefooneigenaarModelDAO().save();
+        try {
+            MainApplication.getMasterDAO().save();
+            MainApplication.getTelefooneigenaarModelDAO().save();
+        } catch (Exception e) {
+            alert.setContentText("Er ging iets fout tijdens het opslaan probeer het opnieuw");
+            alert.show();
+        }
+        alert.setContentText("Het opslaan is gelukt");
+        alert.show();
     }
     public void menuMerkLaden(){
         MainApplication.getMasterDAO().load();
@@ -170,13 +182,6 @@ public class MasterController extends Controller {
     public void menuTelefooneigenaarLaden(){
         MainApplication.getTelefooneigenaarModelDAO().load();
     }
-    public void menuMerkAfsluiten(){
-
-    }
-    public void menuTelefooneigenaarAfsluiten(){
-
-    }
-
     public boolean ishetgeselecteerd() {
         Alert alertGeselecteerd = new Alert(Alert.AlertType.WARNING);
         if (masterview.getLvmerkListView().getSelectionModel().getSelectedItem() == null) {
