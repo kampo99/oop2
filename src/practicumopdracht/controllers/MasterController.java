@@ -3,134 +3,231 @@ package practicumopdracht.controllers;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.scene.Parent;
 import javafx.scene.control.Alert;
-import javafx.scene.control.ListView;
+import javafx.scene.control.ButtonBar;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.ComboBox;
 import practicumopdracht.MainApplication;
-import practicumopdracht.model.Merk;
-import practicumopdracht.model.Telefooneigenaar;
+import practicumopdracht.comparators.MerkNaamComparator;
+import practicumopdracht.comparators.MerkOprichtdatumComparator;
+import practicumopdracht.comparators.TelefooneigenaarNaamComparator;
+import practicumopdracht.data.TextMerkModelDAO;
+import practicumopdracht.data.TextTelefooneigenaarModelDAO;
+import practicumopdracht.model.MerkModel;
+import practicumopdracht.model.TelefooneigenaarModel;
+import practicumopdracht.views.Detailview;
 import practicumopdracht.views.Masterview;
 import practicumopdracht.views.View;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 
 /**
  * This method <description of functionality>
  *
  * @author Po
  */
-public class MasterController extends Controller{
+public class MasterController extends Controller {
     private final View VIEW;
     private Masterview masterview;
-    private ObservableList<Merk> merkObservableList;
-    private Telefooneigenaar telefooneigenaar;
-    private Merk merkmodel;
+    private Detailview detailview;
+    private ObservableList<MerkModel> merkModelObservableList;
+    private TelefooneigenaarModel telefooneigenaarModel;
+    private MerkModel merkmodel;
+    private TextMerkModelDAO textMerkModelDAO;
+    private TextTelefooneigenaarModelDAO textTelefooneigenaarModelDAO;
 
-    public MasterController(){
+    public MasterController() {
         masterview = new Masterview();
-        merkObservableList = FXCollections.observableList(new ArrayList<>());
-        masterview.getLvmerkListView().setItems(merkObservableList);
-        telefooneigenaar = new Telefooneigenaar();
-        merkmodel = new Merk();
+        detailview = new Detailview();
+        merkModelObservableList = FXCollections.observableList(MainApplication.getMasterDAO().getAll());
+        masterview.getLvmerkListView().setItems(merkModelObservableList);
+        telefooneigenaarModel = new TelefooneigenaarModel();
+        merkmodel = new MerkModel();
 
         masterview.getButtonToevoegen().setOnAction(actionEvent -> toevoegenMaster());
         masterview.getButtonVerwijderen().setOnAction(actionEvent -> verwijderenMaster());
         masterview.getButtonDetail().setOnAction(actionEvent -> masterNaarDetail());
         masterview.getButtonOpslaan().setOnAction(actionEvent -> opslaanMaster());
+        masterview.getLvmerkListView().getSelectionModel().selectedItemProperty().addListener((observableValue, oldValue, newValue)-> {
+                    select(newValue);
+            });
+
+        masterview.getMerknaamAZrb().setOnAction(actionEvent -> merknaamAZ());
+        masterview.getMerknaamZArb().setOnAction(actionEvent -> merknaamZA());
+        masterview.getMerkOprichtdatumAZrb().setOnAction(actionEvent -> merkdatumAZ());
+        masterview.getMerkOprichtdatumZArb().setOnAction(actionEvent -> merkdatumZA());
+
+//        masterview.getMenuItem1().setOnAction(actionEvent -> menuMerkOpslaan());
+//        masterview.getMenuItem1().setOnAction(actionEvent -> menuTelefooneigenaarOpslaan());
+//        masterview.getMenuItem2().setOnAction(actionEvent -> menuMerkLaden());
+//        masterview.getMenuItem2().setOnAction(actionEvent -> menuTelefooneigenaarLaden());
+//        masterview.getMenuItem3().setOnAction(actionEvent -> menuMerkAfsluiten());
+//        masterview.getMenuItem3().setOnAction(actionEvent -> menuTelefooneigenaarAfsluiten());
 
         VIEW = masterview;
     }
-    public void toevoegenMaster(){
-        if (masterview.getLvmerkListView().getSelectionModel().getSelectedItem() != null){
+
+    public void toevoegenMaster() {
+        if (masterview.getLvmerkListView().getSelectionModel().getSelectedItem() != null) {
             masterview.getLvmerkListView().getSelectionModel().clearSelection();
             masterview.getTfmerkNaam().setText("");
             masterview.getTfnetWaarde().setText("");
             masterview.getDpoprichtDatum().setValue(LocalDate.now());
             return;
         }
-        while(!checkAlerts()){
+        while (!checkAlerts()) {
             return;
         }
-        merkObservableList.addAll(new Merk(masterview.getTfmerkNaam().getText(),masterview.getTfnetWaarde().getText(),masterview.getDpoprichtDatum().getValue()));
-            masterview.getTfmerkNaam().setText("");
-            masterview.getTfnetWaarde().setText("");
-            masterview.getDpoprichtDatum().setValue(LocalDate.now());
+        merkModelObservableList.addAll(new MerkModel(masterview.getTfmerkNaam().getText(), masterview.getTfnetWaarde().getText(), masterview.getDpoprichtDatum().getValue()));
+        masterview.getTfmerkNaam().setText("");
+        masterview.getTfnetWaarde().setText("");
+        masterview.getDpoprichtDatum().setValue(LocalDate.now());
 
         masterview.getLvmerkListView().getSelectionModel().selectedItemProperty().addListener(
                 (observable, oldValue, newValue) -> {
-                    if(newValue != null)
+                    if (newValue != null)
                         masterview.getTfmerkNaam().setText(newValue.getMerkNaam());
-                    if(newValue != null)
+                    if (newValue != null)
                         masterview.getTfnetWaarde().setText(newValue.getNetWaarde());
                     if (newValue != null)
                         masterview.getDpoprichtDatum().setValue(newValue.getOprichtdatum());
-                    });
+                });
     }
-    public void verwijderenMaster(){
-            merkObservableList.remove(masterview.getLvmerkListView().getSelectionModel().getSelectedItem());
-            masterview.getLvmerkListView().getSelectionModel().clearSelection();
-            masterview.getTfmerkNaam().setText("");
-            masterview.getTfnetWaarde().setText("");
-            masterview.getDpoprichtDatum().setValue(null);
+
+    public void verwijderenMaster() {
+        merkModelObservableList.remove(masterview.getLvmerkListView().getSelectionModel().getSelectedItem());
+        masterview.getLvmerkListView().getSelectionModel().clearSelection();
+        masterview.getTfmerkNaam().setText("");
+        masterview.getTfnetWaarde().setText("");
+        masterview.getDpoprichtDatum().setValue(null);
     }
-    public void masterNaarDetail(){
+    public ObservableValue<ObservableList<MerkModel>> getMerkItemsProperty() {
+        return masterview.getLvmerkListView().itemsProperty();
+    }
+    public void masterNaarDetail() {
+
+//        DetailController detailController = (DetailController) MainApplication.getDetailController();
+//        ComboBox<MerkModel> merkModelComboBox = detailController.;
+//        merkModelComboBox.setItems(merkModelObservableList);
+//        merkModelComboBox.setValue(masterview.getLvmerkListView().getSelectionModel().getSelectedItem());
         MainApplication.setScene(new DetailController());
     }
-        public void opslaanMaster(){
-        while(!ishetgeselecteerd()){
+
+    public void opslaanMaster() {
+        while (!ishetgeselecteerd()) {
             return;
         }
-        while (!checkAlerts()){
+        while (!checkAlerts()) {
             return;
         }
-//        masterview.getLvmerkListView().getSelectionModel().getSelectedItem().setMerkNaam(masterview.getTfmerkNaam().getText());
-//        masterview.getLvmerkListView().getSelectionModel().getSelectedItem().setNetWaarde(masterview.getTfnetWaarde().getText());
-//        masterview.getLvmerkListView().getSelectionModel().getSelectedItem().setOprichtdatum(masterview.getDpoprichtDatum().getValue());
+        masterview.getLvmerkListView().getSelectionModel().selectedItemProperty().addListener(
+                (observable, oldValue, newValue) -> {
+                    if (newValue != null)
+                        masterview.getTfmerkNaam().setText(newValue.getMerkNaam());
+                    if (newValue != null)
+                        masterview.getTfnetWaarde().setText(newValue.getNetWaarde());
+                    if (newValue != null)
+                        masterview.getDpoprichtDatum().setValue(newValue.getOprichtdatum());
+                });
+
         merkmodel.setMerkNaam(masterview.getTfmerkNaam().getText());
         merkmodel.setNetWaarde(masterview.getTfnetWaarde().getText());
         merkmodel.setOprichtdatum(masterview.getDpoprichtDatum().getValue());
-        telefooneigenaar.getMerken().add(merkmodel);
+        telefooneigenaarModel.getMerken().add(merkmodel);
 
         masterview.getLvmerkListView().getSelectionModel().clearSelection();
     }
-    public boolean ishetgeselecteerd(){
+    public void merknaamAZ(){
+        FXCollections.sort(masterview.getLvmerkListView().getItems(), new MerkNaamComparator());
+    }
+    public void merknaamZA(){
+        FXCollections.sort(masterview.getLvmerkListView().getItems(), new MerkNaamComparator().reversed());
+    }
+    public void merkdatumAZ(){
+        FXCollections.sort(masterview.getLvmerkListView().getItems(), new MerkOprichtdatumComparator());
+    }
+    public void merkdatumZA(){
+        FXCollections.sort(masterview.getLvmerkListView().getItems(), new MerkOprichtdatumComparator().reversed());
+    }
+    public void menuMerkOpslaan(){
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        try {
+            MainApplication.getMasterDAO().save();
+            MainApplication.getTelefooneigenaarModelDAO().save();
+        } catch (Exception e) {
+            alert.setContentText("Er ging iets fout tijdens het opslaan probeer het opnieuw");
+            alert.show();
+        }
+        alert.setContentText("Het opslaan is gelukt");
+        alert.show();
+    }
+    public void menuTelefooneigenaarOpslaan(){
+        MainApplication.getTelefooneigenaarModelDAO().save();
+    }
+    public void menuMerkLaden(){
+        MainApplication.getMasterDAO().load();
+    }
+    public void menuTelefooneigenaarLaden(){
+        MainApplication.getTelefooneigenaarModelDAO().load();
+    }
+    public void menuMerkAfsluiten(){
+
+    }
+    public void menuTelefooneigenaarAfsluiten(){
+
+    }
+
+    public boolean ishetgeselecteerd() {
         Alert alertGeselecteerd = new Alert(Alert.AlertType.WARNING);
-        if (masterview.getLvmerkListView().getSelectionModel().getSelectedItem() == null){
+        if (masterview.getLvmerkListView().getSelectionModel().getSelectedItem() == null) {
             masterview.getLvmerkListView().getSelectionModel().clearSelection();
             masterview.getTfmerkNaam().setText("");
-            alertGeselecteerd.setContentText("Selecteer een Merk");
+            alertGeselecteerd.setContentText("Selecteer een MerkModel");
             alertGeselecteerd.show();
         }
         return false;
     }
-    public boolean checkAlerts(){
+
+    public boolean checkAlerts() {
         Alert alertMelding = new Alert(Alert.AlertType.WARNING);
-        if (masterview.getTfmerkNaam().getText().isEmpty()){
+        if (masterview.getTfmerkNaam().getText().isEmpty()) {
             alertMelding.setContentText("Naam moet ingevuld zijn!");
             alertMelding.show();
             return false;
         }
-        if(masterview.getTfnetWaarde().getText().isEmpty()){
+        if (masterview.getTfnetWaarde().getText().isEmpty()) {
             alertMelding.setContentText("Netwaarde moet ingevuld zijn!");
             alertMelding.show();
             return false;
         }
-        if(masterview.getDpoprichtDatum().getValue() == null){
+        if (masterview.getDpoprichtDatum().getValue() == null) {
             alertMelding.setContentText("Oprichtdatum moet ingevuld zijn!");
             alertMelding.show();
             return false;
         }
-        try{
+        try {
             Double.parseDouble(masterview.getTfnetWaarde().getText());
-        } catch (NumberFormatException error){
+        } catch (NumberFormatException error) {
             alertMelding.setContentText("NETWAARDE MOET EEN GETAL BEVATTEN!\n(decimaal met een punt invoeren ipv. komma)");
             alertMelding.show();
         }
         return true;
     }
 
-    @Override
+        public void select(MerkModel newValue){
+            if (newValue != null){
+                masterview.getTfmerkNaam().setText(newValue.getMerkNaam());
+            }
+            if (newValue != null){
+                masterview.getTfnetWaarde().setText(newValue.getNetWaarde());
+            }
+            if (newValue != null){
+                masterview.getDpoprichtDatum().setValue(newValue.getOprichtdatum());
+            }
+
+        }
+
+        @Override
     public View getView() {
         return VIEW;
     }

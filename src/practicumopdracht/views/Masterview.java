@@ -1,23 +1,11 @@
 package practicumopdracht.views;
 
-import com.sun.javafx.scene.control.InputField;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
-import javafx.scene.text.Text;
-import javafx.util.converter.LocalDateStringConverter;
-import javafx.util.converter.LocalDateTimeStringConverter;
-import practicumopdracht.model.Merk;
-
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.regex.Matcher;
+import practicumopdracht.model.MerkModel;
 
 /**
  * This method <description of functionality>
@@ -26,7 +14,7 @@ import java.util.regex.Matcher;
  */
 public class Masterview extends View {
     private Parent root;
-    private ListView<Merk> lvmerkListView;
+    private ListView<MerkModel> lvmerkListView;
     private Button buttonToevoegen;
     private Button buttonVerwijderen;
     private Button buttonOpslaan;
@@ -34,6 +22,13 @@ public class Masterview extends View {
     private TextField tfmerkNaam;
     private TextField tfnetWaarde;
     private DatePicker dpoprichtDatum;
+    private MenuItem menuItem1;
+    private MenuItem menuItem2;
+    private MenuItem menuItem3;
+    private RadioButton merknaamAZrb;
+    private RadioButton merknaamZArb;
+    private RadioButton merkOprichtdatumAZrb;
+    private RadioButton merkOprichtdatumZArb;
 
     public Masterview(){
         initalizeRoot();
@@ -46,14 +41,31 @@ public class Masterview extends View {
         vbox.prefHeight(755);
         vbox.prefWidth(455);
         vbox.setStyle("-fx-background-color: #3db295");
+
+
+        MenuBar menubar = new MenuBar();
+        Menu menu1 = new Menu("Bestand");
+        Menu menu2 = new Menu("Sorteren");
+        MenuItem menuItem1 = new MenuItem("Opslaan");
+        MenuItem menuItem2 = new MenuItem("Laden");
+        SeparatorMenuItem separatormenu = new SeparatorMenuItem();
+        MenuItem menuItem3 = new MenuItem("Afsluiten");
+
+        MenuItem menuItem4 = new MenuItem("Oplopend");
+        MenuItem menuItem5 = new MenuItem("Aflopend");
+        menu1.getItems().addAll(menuItem1,menuItem2,separatormenu,menuItem3);
+        menu2.getItems().addAll(menuItem4,menuItem5);
+        menubar.getMenus().addAll(menu1,menu2);
+
+        BorderPane borderpane = new BorderPane(menubar);
         GridPane gridpane = new GridPane();
         gridpane.setStyle("-fx-font-size: 14px");
-        Label lblTitel = new Label("Master - Merk");
+        Label lblTitel = new Label("Master - MerkModel");
         lblTitel.setStyle("-fx-font-weight: bold");
         Label lblmerkNaam = new Label("Merknaam: ");
         lblmerkNaam.setStyle("-fx-font-family: Lato");
         this.tfmerkNaam = new TextField();
-        Label lblnetWaarde = new Label("Netwaarde (in miljard): ");
+        Label lblnetWaarde = new Label("Netwaarde (in biljoen): ");
         lblnetWaarde.setStyle("-fx-font-family: Lato");
         this.tfnetWaarde = new TextField();
         Label lbloprichtDatum = new Label("Oprichtdatum: ");
@@ -63,6 +75,17 @@ public class Masterview extends View {
         lbllistView.setStyle("-fx-font-size: 14px");
         this.lvmerkListView = new ListView<>();
         lvmerkListView.setStyle("-fx-font-size: 14px");
+
+        this.merknaamAZrb = new RadioButton("Merknaam A-Z");
+        this.merknaamZArb = new RadioButton("Merknaam Z-A");
+        this.merkOprichtdatumAZrb = new RadioButton("Oudste Merk");
+        this.merkOprichtdatumZArb = new RadioButton("Nieuwste Merk");
+        this.merknaamAZrb.setSelected(true);
+        ToggleGroup merkRbtns = new ToggleGroup();
+        merkRbtns.getToggles().addAll(merknaamAZrb,merknaamZArb,merkOprichtdatumAZrb,merkOprichtdatumZArb);
+
+        HBox radioButtons1 = new HBox();
+        radioButtons1.getChildren().addAll(merknaamAZrb,merknaamZArb,merkOprichtdatumAZrb,merkOprichtdatumZArb);
 
         VBox.setVgrow(gridpane, Priority.ALWAYS);
         gridpane.setHgap(4);
@@ -78,6 +101,7 @@ public class Masterview extends View {
 
         HBox buttonbox1 = new HBox();
         HBox.setHgrow(gridpane,Priority.ALWAYS);
+        HBox.setHgrow(buttonbox1,Priority.ALWAYS);
         buttonbox1.setStyle("-fx-font-size: 14px");
         buttonbox1.setPadding(new Insets(0,0,10,10));
         buttonbox1.setSpacing(10);
@@ -92,6 +116,7 @@ public class Masterview extends View {
         gridpaneListView.setVgap(8);
         gridpaneListView.add(lbllistView,0,0);
         gridpaneListView.add(lvmerkListView,1,0);
+        gridpaneListView.add(radioButtons1,0,1,2,1);
 
         HBox buttonbox2 = new HBox();
         buttonbox2.setStyle("-fx-font-size: 14px");
@@ -101,11 +126,11 @@ public class Masterview extends View {
         this.buttonDetail = new Button("Telefooneigenaren");
 
         buttonbox2.getChildren().addAll(buttonOpslaan,buttonDetail);
-        vbox.getChildren().addAll(gridpane,buttonbox1,gridpaneListView,buttonbox2);
+        vbox.getChildren().addAll(borderpane,gridpane,buttonbox1,gridpaneListView,buttonbox2);
         root = vbox;
     }
 
-    public ListView<Merk> getLvmerkListView() {
+    public ListView<MerkModel> getLvmerkListView() {
         return lvmerkListView;
     }
 
@@ -136,6 +161,35 @@ public class Masterview extends View {
     public DatePicker getDpoprichtDatum() {
         return dpoprichtDatum;
     }
+
+    public MenuItem getMenuItem1() {
+        return menuItem1;
+    }
+
+    public MenuItem getMenuItem2() {
+        return menuItem2;
+    }
+
+    public MenuItem getMenuItem3() {
+        return menuItem3;
+    }
+
+    public RadioButton getMerknaamAZrb() {
+        return merknaamAZrb;
+    }
+
+    public RadioButton getMerknaamZArb() {
+        return merknaamZArb;
+    }
+
+    public RadioButton getMerkOprichtdatumAZrb() {
+        return merkOprichtdatumAZrb;
+    }
+
+    public RadioButton getMerkOprichtdatumZArb() {
+        return merkOprichtdatumZArb;
+    }
+
 
     public Parent getRoot() {
         return root;
